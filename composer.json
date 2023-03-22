@@ -1,0 +1,48 @@
+{
+    "name": "luchavez/passport-pgt-client",
+    "description": "Laravel Passport Password Grant Tokens Client",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "James Carlo Luchavez",
+            "email": "jamescarloluchavez@gmail.com",
+            "homepage": "https://www.linkedin.com/in/jsluchavez"
+        }
+    ],
+    "homepage": "https://github.com/luchmewep/passport-pgt-client",
+    "keywords": ["Laravel", "PassportPgtClient"],
+    "require": {
+        "php": "^8.0",
+        "illuminate/support": "~8|~9",
+        "luchavez/api-sdk-kit": "^1.0"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "phpunit/phpunit": "~9.0",
+        "orchestra/testbench": "~6|~7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Luchavez\\PassportPgtClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Luchavez\\PassportPgtClient\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Luchavez\\PassportPgtClient\\Providers\\PassportPgtClientServiceProvider"
+            ],
+            "aliases": {
+                "PassportPgtClient": "Luchavez\\PassportPgtClient\\Facades\\PassportPgtClient"
+            }
+        },
+        "branch-alias": {
+            "dev-master": "1.0.x-dev",
+            "dev-develop": "1.0.x-dev"
+        }
+    }
+}
