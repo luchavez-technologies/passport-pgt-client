@@ -33,8 +33,8 @@ class PassportPgtClientServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Register the service the package provides.
-        $this->app->singleton('passport-pgt-client', function ($app, $params) {
-            return new PassportPgtClient(collect($params)->get('auth_client_controller'));
+        $this->app->singleton('passport-pgt-client', function ($app) {
+            return new PassportPgtClient($app);
         });
 
         parent::register();
