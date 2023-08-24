@@ -2,10 +2,10 @@
 
 namespace Luchavez\PassportPgtClient\Services;
 
-use Luchavez\PassportPgtClient\Http\Controllers\DefaultAuthController;
+use Illuminate\Foundation\Application;
+use Luchavez\ApiSdkKit\Services\SimpleHttp;
 use Luchavez\PassportPgtClient\Traits\HasAuthMethodsTrait;
 use Luchavez\ApiSdkKit\Abstracts\BaseApiSdkService;
-use Luchavez\ApiSdkKit\Services\MakeRequest;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 
@@ -24,14 +24,14 @@ class PassportPgtClient extends BaseApiSdkService
     protected array $controllers = [];
 
     /**
-     * @param  string|null  $auth_controller
+     * @param Application $application
      */
-    public function __construct(string $auth_controller = null)
+    public function __construct(protected Application $application)
     {
         // Rehydrate first
         $this->controllers = $this->getControllers()->toArray();
 
-        $this->setAuthController($auth_controller ?? DefaultAuthController::class, false, false);
+        $this->setAuthController(config('passport-pgt-client.auth_controller'), false, false);
     }
 
     /**
@@ -81,11 +81,12 @@ class PassportPgtClient extends BaseApiSdkService
     /**
      * Since tokens are very sensitive information, they should not be logged.
      *
-     * @return MakeRequest
+     * @param bool $return_as_model
+     * @return SimpleHttp
      */
-    public function getMakeRequest(): MakeRequest
+    public function getHttp(bool $return_as_model = true): SimpleHttp
     {
-        return parent::getMakeRequest()->returnAsResponse();
+        return parent::getHttp()->returnAsResponse();
     }
 
     /***** CONTROLLER-RELATED *****/
@@ -132,20 +133,20 @@ class PassportPgtClient extends BaseApiSdkService
 
     /**
      * @param  array  $data
-     * @return MakeRequest
+     * @return SimpleHttp
      */
-    public function register(array $data): MakeRequest
+    public function register(array $data): SimpleHttp
     {
-        return tap($this->getMakeRequest()->asJson()->data($data))->post('api/oauth/register');
+        return tap($this->getHttp()->asJson()->data($data))->post('api/oauth/register');
     }
 
     /**
      * @param  string  $username
      * @param  string  $password
      * @param  array  $scopes
-     * @return MakeRequest
+     * @return SimpleHttp
      */
-    public function login(string $username, string $password, array $scopes = []): MakeRequest
+    public function login(string $username, string $password, array $scopes = []): SimpleHttp
     {
         $data = [
             'grant_type' => 'password',
@@ -156,15 +157,15 @@ class PassportPgtClient extends BaseApiSdkService
             'scope' => $this->getSluggedScopes($scopes),
         ];
 
-        return tap($this->getMakeRequest()->asJson()->data($data))->post('oauth/token');
+        return tap($this->getHttp()->asJson()->data($data))->post('oauth/token');
     }
 
     /**
      * @param  string  $refresh_token
      * @param  array  $scopes
-     * @return MakeRequest
+     * @return SimpleHttp
      */
-    public function refreshToken(string $refresh_token, array $scopes = []): MakeRequest
+    public function refreshToken(string $refresh_token, array $scopes = []): SimpleHttp
     {
         $data = [
             'grant_type' => 'refresh_token',
@@ -174,33 +175,33 @@ class PassportPgtClient extends BaseApiSdkService
             'scope' => $this->getSluggedScopes($scopes),
         ];
 
-        return tap($this->getMakeRequest()->asJson()->data($data))->post('oauth/token');
+        return tap($this->getHttp()->asJson()->data($data))->post('oauth/token');
     }
 
     /**
      * @param  string|null  $token
-     * @return MakeRequest
+     * @return SimpleHttp
      */
-    public function logout(string|null $token): MakeRequest
+    public function logout(string|null $token): SimpleHttp
     {
         $headers = [
             'Authorization' => 'Bearer '.$token,
         ];
 
-        return tap($this->getMakeRequest()->asJson()->headers($headers))->post('api/oauth/logout');
+        return tap($this->getHttp()->asJson()->headers($headers))->post('api/oauth/logout');
     }
 
     /**
      * @param  string|null  $token
-     * @return MakeRequest
+     * @return SimpleHttp
      */
-    public function getSelf(string|null $token): MakeRequest
+    public function getSelf(string|null $token): SimpleHttp
     {
         $headers = [
             'Authorization' => 'Bearer '.$token,
         ];
 
-        return tap($this->getMakeRequest()->asJson()->headers($headers))->get('api/oauth/me');
+        return tap($this->getHttp()->asJson()->headers($headers))->get('api/oauth/me');
     }
 
     /**

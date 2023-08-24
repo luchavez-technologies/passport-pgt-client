@@ -8,24 +8,20 @@ use Luchavez\PassportPgtClient\Services\PassportPgtClient;
 
 if (! function_exists('passportPgtClient')) {
     /**
-     * @param  string|null  $auth_client_controller_class
      * @return PassportPgtClient
      */
-    function passportPgtClient(string $auth_client_controller_class = null): PassportPgtClient
+    function passportPgtClient(): PassportPgtClient
     {
-        return resolve('passport-pgt-client', [
-            'auth_client_controller' => $auth_client_controller_class,
-        ]);
+        return resolve('passport-pgt-client');
     }
 }
 
 if (! function_exists('passport_pgt_client')) {
     /**
-     * @param  string|null  $auth_client_controller_class
      * @return PassportPgtClient
      */
-    function passport_pgt_client(string $auth_client_controller_class = null): PassportPgtClient
+    function passport_pgt_client(): PassportPgtClient
     {
-        return passportPgtClient($auth_client_controller_class);
+        return passportPgtClient();
     }
 }
