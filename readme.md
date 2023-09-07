@@ -2,7 +2,9 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
+[![GitHub Repo stars][ico-stars]][link-stars]
 [![Discord][ico-discord]][link-discord]
+[![Twitter Follow][ico-twitter]][link-twitter]
 
 **Laravel Passport** is an authentication package for Laravel. It is used by a lot of Laravel apps to authenticate users before accessing any resources. Basically, it generates an `access token` which you can then use on every request to provide identification to the `OAuth Server`.
 
@@ -17,18 +19,22 @@ Take a look at [contributing.md](contributing.md) if you want to contribute to t
 Via Composer
 
 ``` bash
+// Install the package
 $ composer require luchavez/passport-pgt-client
+
+// Publish the config
+$ php artisan pgt:client:install
 ```
 
 ## Setting Up
 
 1. Add these variables to `.env` file if you want to override the default values.
 
-| Variable Name      | Default Value       | Description                    |
-|--------------------|---------------------|--------------------------------|
-| `PPC_PASSPORT_URL` | `config('app.url')` | URL of Authentication Server   |
-| `PPC_PGC_ID`       | null                | Password grant client's id     |
-| `PPC_PGC_SECRET`   | null                | Password grant client's secret |
+| Variable Name                           | Default Value       | Description                    |
+|-----------------------------------------|---------------------|--------------------------------|
+| `PASSPORT_URL`                          | `config('app.url')` | URL of Authentication Server   |
+| `PASSPORT_PASSWORD_GRANT_CLIENT_ID`     | null                | Password grant client's ID     |
+| `PASSPORT_PASSWORD_GRANT_CLIENT_SECRET` | null                | Password grant client's secret |
 
 ## Usage
 
@@ -40,43 +46,30 @@ The package provides a service called [**PassportPgtClient**](src/Services/Passp
 
 Here's the list of its available methods.
 
-| Method Name                     | Return Type                                                           | Description                                                          |
-|---------------------------------|-----------------------------------------------------------------------|----------------------------------------------------------------------|
-| `getPassportUrl`                | `string`                                                              | gets the URL of Authentication Server                                |
-| `getPasswordGrantClientId`      | `string or int or null`                                               | gets the Password Grant Client's id                                  |
-| `getPasswordGrantClientSecret`  | `string or null`                                                      | gets the Password Grant Client's secret                              |
-| `setAuthClientController`       | `string or null`                                                      | sets the `AuthClientController`                                      |
-| `getAuthClientController`       | `string or null`                                                      | gets the `AuthClientController`                                      |
-| `setLoginAuthController`        | `void`                                                                | sets the `LoginAuthController`                                       |
-| `getLoginAuthController`        | `array`                                                               | gets the `LoginAuthController`                                       |
-| `setRefreshTokenAuthController` | `void`                                                                | sets the `RefreshTokenAuthController`                                |
-| `getRefreshTokenAuthController` | `array`                                                               | gets the `RefreshTokenAuthController`                                |
-| `setLogoutAuthController`       | `void`                                                                | sets the `LogoutAuthController`                                      |
-| `getLogoutAuthController`       | `array`                                                               | gets the `LogoutAuthController`                                      |
-| `setMeAuthController`           | `void`                                                                | sets the `MeAuthController`                                          |
-| `getMeAuthController`           | `array`                                                               | gets the `MeAuthController`                                          |
-| `login`                         | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/oauth/token` to login          |
-| `refreshToken`                  | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/oauth/token` to refresh tokens |
-| `logout`                        | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/api/oauth/logout` to logout    |
-| `getSelf`                       | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends GET request to Auth Server's `/api/oauth/me` to get user info  |
+| Method Name                    | Return Type                                                             | Description                                                          |
+|--------------------------------|-------------------------------------------------------------------------|----------------------------------------------------------------------|
+| `getPassportUrl`               | `string`                                                                | gets the URL of Authentication Server                                |
+| `getPasswordGrantClientId`     | `string or int or null`                                                 | gets the Password Grant Client's id                                  |
+| `getPasswordGrantClientSecret` | `string or null`                                                        | gets the Password Grant Client's secret                              |
+| `register`                     | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/oauth/token` to login          |
+| `login`                        | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/oauth/token` to login          |
+| `refreshToken`                 | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/oauth/token` to refresh tokens |
+| `logout`                       | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/api/oauth/logout` to logout    |
+| `getSelf`                      | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends GET request to Auth Server's `/api/oauth/me` to get user info  |
 
 ### Routes
 
 Here's the list of routes that this package provides.
 
-| Method | Route                | Description                                                                      |
-|--------|----------------------|----------------------------------------------------------------------------------|
-| POST   | `/api/login`         | This route sends POST request to Auth Server's `/oauth/token` to login.          |
-| POST   | `/api/refresh-token` | This route sends POST request to Auth Server's `/oauth/token` to refresh tokens. |
-| POST   | `/api/logout`        | This route sends POST request to Auth Server's `/api/oauth/logout` to logout.    |
-| GET    | `/api/me`            | This route sends GET request to Auth Server's `/api/oauth/me` to get user info.  |
+| Method | Route                | Description                                                                       |
+|--------|----------------------|-----------------------------------------------------------------------------------|
+| POST   | `/api/register`      | This route sends POST request to Auth Server's `/api/oauth/register` to register. |
+| POST   | `/api/login`         | This route sends POST request to Auth Server's `/oauth/token` to login.           |
+| POST   | `/api/refresh-token` | This route sends POST request to Auth Server's `/oauth/token` to refresh tokens.  |
+| POST   | `/api/logout`        | This route sends POST request to Auth Server's `/api/oauth/logout` to logout.     |
+| GET    | `/api/me`            | This route sends GET request to Auth Server's `/api/oauth/me` to get user info.   |
 
-*Note*: If you wish to override the login, refresh token, logout, or get self logic, feel free to do so by using these methods from `PassportPgtClient` class:
-- `setAuthClientController()`
-- `setLoginAuthController()`
-- `setRefreshTokenAuthController()`
-- `setLogoutAuthController()`
-- `setMeAuthController()`
+*Note*: If you wish to override the login, refresh token, logout, or get self logic, feel free to do so by updating the published `passport-pgt-client` config file.
 
 ### Examples
 
@@ -123,16 +116,17 @@ If you discover any security related issues, please email jamescarloluchavez@gma
 
 MIT. Please see the [license file](license.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/luchavez/passport-pgt-client.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/luchavez/passport-pgt-client.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/luchavez/passport-pgt-client/master.svg?style=flat-square
-[ico-styleci]: https://styleci.io/repos/12345678/shield
+[ico-version]: https://img.shields.io/packagist/v/luchavez/passport-pgt-client.svg
+[ico-downloads]: https://img.shields.io/packagist/dt/luchavez/passport-pgt-client.svg
+[ico-stars]: https://img.shields.io/github/stars/luchavez-technologies/passport-pgt-client
 [ico-discord]: https://img.shields.io/discord/1143744619956404295?color=8c9eff&label=Discord&logo=discord
+[ico-twitter]: https://img.shields.io/twitter/follow/luchaveztech
 
 [link-packagist]: https://packagist.org/packages/luchavez/passport-pgt-client
 [link-downloads]: https://packagist.org/packages/luchavez/passport-pgt-client
-[link-travis]: https://travis-ci.org/luchavez/passport-pgt-client
-[link-styleci]: https://styleci.io/repos/12345678
+[link-stars]: https://github.com/luchavez-technologies/passport-pgt-client
+[link-discord]: https://discord.gg/MBxxAkQAxx
+[link-twitter]: https://twitter.com/luchaveztech
+
 [link-author]: https://github.com/luchavez-technologies
 [link-contributors]: ../../contributors
-[link-discord]: https://discord.gg/bFpDTgp3

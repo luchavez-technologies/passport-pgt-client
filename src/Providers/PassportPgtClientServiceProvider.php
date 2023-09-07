@@ -2,6 +2,7 @@
 
 namespace Luchavez\PassportPgtClient\Providers;
 
+use Luchavez\PassportPgtClient\Console\Commands\InstallPassportPGTClientCommand;
 use Luchavez\PassportPgtClient\Services\PassportPgtClient;
 use Luchavez\StarterKit\Abstracts\BaseStarterKitServiceProvider as ServiceProvider;
 
@@ -12,6 +13,10 @@ use Luchavez\StarterKit\Abstracts\BaseStarterKitServiceProvider as ServiceProvid
  */
 class PassportPgtClientServiceProvider extends ServiceProvider
 {
+    protected array $commands = [
+        InstallPassportPGTClientCommand::class,
+    ];
+
     /**
      * Publishable Environment Variables
      *
@@ -20,9 +25,9 @@ class PassportPgtClientServiceProvider extends ServiceProvider
      * @var array
      */
     protected array $env_vars = [
-        'PPC_PGC_ID' => null,
-        'PPC_PGC_SECRET' => null,
-        'PPC_PASSPORT_URL' => '${APP_URL}',
+        'PASSPORT_PASSWORD_GRANT_CLIENT_ID' => null,
+        'PASSPORT_PASSWORD_GRANT_CLIENT_SECRET' => null,
+        'PASSPORT_URL' => '${APP_URL}',
     ];
 
     /**
@@ -33,11 +38,7 @@ class PassportPgtClientServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Register the service the package provides.
-        $this->app->singleton('passport-pgt-client', function ($app) {
-            return new PassportPgtClient($app);
-        });
-
-        parent::register();
+        $this->app->singleton('passport-pgt-client', fn ($app) => new PassportPgtClient($app));
     }
 
     /**
@@ -59,19 +60,10 @@ class PassportPgtClientServiceProvider extends ServiceProvider
     {
         // Publishing the configuration file.
         $this->publishes([
-            __DIR__.'/../config/passport-pgt-client.php' => config_path('passport-pgt-client.php'),
+            __DIR__.'/../../config/passport-pgt-client.php' => config_path('passport-pgt-client.php'),
         ], 'passport-pgt-client.config');
 
         // Registering package commands.
-        // $this->commands([]);
-    }
-
-    /**
-     * @param  bool  $is_api
-     * @return array
-     */
-    public function getDefaultRouteMiddleware(bool $is_api): array
-    {
-        return []; // Must be blank since middleware should be setup on Passport PGT Server.
+        $this->commands($this->commands);
     }
 }

@@ -4,9 +4,7 @@ namespace Luchavez\PassportPgtClient\Services;
 
 use Illuminate\Foundation\Application;
 use Luchavez\ApiSdkKit\Services\SimpleHttp;
-use Luchavez\PassportPgtClient\Traits\HasAuthMethodsTrait;
 use Luchavez\ApiSdkKit\Abstracts\BaseApiSdkService;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 
 /**
@@ -16,30 +14,12 @@ use Illuminate\Support\Str;
  */
 class PassportPgtClient extends BaseApiSdkService
 {
-    use HasAuthMethodsTrait;
-
-    /**
-     * @var array
-     */
-    protected array $controllers = [];
-
     /**
      * @param Application $application
      */
     public function __construct(protected Application $application)
     {
-        // Rehydrate first
-        $this->controllers = $this->getControllers()->toArray();
-
-        $this->setAuthController(config('passport-pgt-client.auth_controller'), false, false);
-    }
-
-    /**
-     * @return string
-     */
-    public function getMainTag(): string
-    {
-        return 'passport-pgt-client';
+        //
     }
 
     /***** CONFIG-RELATED *****/
@@ -49,7 +29,7 @@ class PassportPgtClient extends BaseApiSdkService
      */
     public function getPassportUrl(): string
     {
-        return config('passport-pgt-client.passport_url');
+        return config('passport-pgt-client.passport_server.url');
     }
 
     /**
@@ -57,7 +37,7 @@ class PassportPgtClient extends BaseApiSdkService
      */
     public function getPasswordGrantClientId(): int|string|null
     {
-        return config('passport-pgt-client.password_grant_client.id');
+        return config('passport-pgt-client.passport_server.password_grant_client.id');
     }
 
     /**
@@ -65,7 +45,7 @@ class PassportPgtClient extends BaseApiSdkService
      */
     public function getPasswordGrantClientSecret(): ?string
     {
-        return config('passport-pgt-client.password_grant_client.secret');
+        return config('passport-pgt-client.passport_server.password_grant_client.secret');
     }
 
     /***** BASE API SERVICE METHODS  *****/
@@ -89,46 +69,6 @@ class PassportPgtClient extends BaseApiSdkService
         return parent::getHttp()->returnAsResponse();
     }
 
-    /***** CONTROLLER-RELATED *****/
-
-    /**
-     * @param  string  $controller
-     * @param  bool  $override
-     * @param  bool  $throw_error
-     */
-    public function setAuthController(string $controller, bool $override = false, bool $throw_error = true): void
-    {
-        if (is_subclass_of($controller, Controller::class)) {
-            $this->setRegisterController($controller, $override, $throw_error);
-            $this->setLoginController($controller, $override, $throw_error);
-            $this->setLogoutController($controller, $override, $throw_error);
-            $this->setMeController($controller, $override, $throw_error);
-            $this->setRefreshTokenController($controller, $override, $throw_error);
-        }
-    }
-
-    /**
-     * @param  string  $login_controller
-     * @param  bool  $override
-     * @param  bool  $throw_error
-     * @return bool
-     */
-    public function setLoginController(string $login_controller, bool $override = false, bool $throw_error = true): bool
-    {
-        return $this->setController('login', $login_controller, $override, $throw_error);
-    }
-
-    /**
-     * @param  string  $refresh_token_controller
-     * @param  bool  $override
-     * @param  bool  $throw_error
-     * @return bool
-     */
-    public function setRefreshTokenController(string $refresh_token_controller, bool $override = false, bool $throw_error = true): bool
-    {
-        return $this->setController('refreshToken', $refresh_token_controller, $override, $throw_error);
-    }
-
     /***** AUTH-RELATED FUNCTIONS *****/
 
     /**
@@ -137,7 +77,9 @@ class PassportPgtClient extends BaseApiSdkService
      */
     public function register(array $data): SimpleHttp
     {
-        return tap($this->getHttp()->asJson()->data($data))->post('api/oauth/register');
+        ['uri' => $uri, 'http_method' => $method] = config('passport-pgt-client.passport_server.routes.register');
+
+        return tap($this->getHttp()->asJson()->data($data))->$method($uri);
     }
 
     /**
@@ -148,6 +90,8 @@ class PassportPgtClient extends BaseApiSdkService
      */
     public function login(string $username, string $password, array $scopes = []): SimpleHttp
     {
+        ['uri' => $uri, 'http_method' => $method] = config('passport-pgt-client.passport_server.routes.login');
+
         $data = [
             'grant_type' => 'password',
             'client_id' => $this->getPasswordGrantClientId(),
@@ -157,7 +101,7 @@ class PassportPgtClient extends BaseApiSdkService
             'scope' => $this->getSluggedScopes($scopes),
         ];
 
-        return tap($this->getHttp()->asJson()->data($data))->post('oauth/token');
+        return tap($this->getHttp()->asJson()->data($data))->$method($uri);
     }
 
     /**
@@ -167,6 +111,8 @@ class PassportPgtClient extends BaseApiSdkService
      */
     public function refreshToken(string $refresh_token, array $scopes = []): SimpleHttp
     {
+        ['uri' => $uri, 'http_method' => $method] = config('passport-pgt-client.passport_server.routes.refresh-token');
+
         $data = [
             'grant_type' => 'refresh_token',
             'refresh_token' => $refresh_token,
@@ -175,7 +121,7 @@ class PassportPgtClient extends BaseApiSdkService
             'scope' => $this->getSluggedScopes($scopes),
         ];
 
-        return tap($this->getHttp()->asJson()->data($data))->post('oauth/token');
+        return tap($this->getHttp()->asJson()->data($data))->$method($uri);
     }
 
     /**
@@ -184,11 +130,13 @@ class PassportPgtClient extends BaseApiSdkService
      */
     public function logout(string|null $token): SimpleHttp
     {
+        ['uri' => $uri, 'http_method' => $method] = config('passport-pgt-client.passport_server.routes.logout');
+
         $headers = [
             'Authorization' => 'Bearer '.$token,
         ];
 
-        return tap($this->getHttp()->asJson()->headers($headers))->post('api/oauth/logout');
+        return tap($this->getHttp()->asJson()->headers($headers))->$method($uri);
     }
 
     /**
@@ -197,11 +145,13 @@ class PassportPgtClient extends BaseApiSdkService
      */
     public function getSelf(string|null $token): SimpleHttp
     {
+        ['uri' => $uri, 'http_method' => $method] = config('passport-pgt-client.passport_server.routes.me');
+
         $headers = [
             'Authorization' => 'Bearer '.$token,
         ];
 
-        return tap($this->getHttp()->asJson()->headers($headers))->get('api/oauth/me');
+        return tap($this->getHttp()->asJson()->headers($headers))->$method($uri);
     }
 
     /**
