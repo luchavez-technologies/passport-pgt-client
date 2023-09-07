@@ -19,7 +19,11 @@ Take a look at [contributing.md](contributing.md) if you want to contribute to t
 Via Composer
 
 ``` bash
+// Install the package
 $ composer require luchavez/passport-pgt-client
+
+// Publish the config
+$ php artisan pgt:client:install
 ```
 
 ## Setting Up
@@ -64,12 +68,7 @@ Here's the list of routes that this package provides.
 | POST   | `/api/logout`        | This route sends POST request to Auth Server's `/api/oauth/logout` to logout.    |
 | GET    | `/api/me`            | This route sends GET request to Auth Server's `/api/oauth/me` to get user info.  |
 
-*Note*: If you wish to override the login, refresh token, logout, or get self logic, feel free to do so by using these methods from `PassportPgtClient` class:
-- `setAuthClientController()`
-- `setLoginAuthController()`
-- `setRefreshTokenAuthController()`
-- `setLogoutAuthController()`
-- `setMeAuthController()`
+*Note*: If you wish to override the login, refresh token, logout, or get self logic, feel free to do so by updating the published `passport-pgt-client` config file.
 
 ### Examples
 
