@@ -61,12 +61,13 @@ Here's the list of its available methods.
 
 Here's the list of routes that this package provides.
 
-| Method | Route                | Description                                                                      |
-|--------|----------------------|----------------------------------------------------------------------------------|
-| POST   | `/api/login`         | This route sends POST request to Auth Server's `/oauth/token` to login.          |
-| POST   | `/api/refresh-token` | This route sends POST request to Auth Server's `/oauth/token` to refresh tokens. |
-| POST   | `/api/logout`        | This route sends POST request to Auth Server's `/api/oauth/logout` to logout.    |
-| GET    | `/api/me`            | This route sends GET request to Auth Server's `/api/oauth/me` to get user info.  |
+| Method | Route                | Description                                                                       |
+|--------|----------------------|-----------------------------------------------------------------------------------|
+| POST   | `/api/register`      | This route sends POST request to Auth Server's `/api/oauth/register` to register. |
+| POST   | `/api/login`         | This route sends POST request to Auth Server's `/oauth/token` to login.           |
+| POST   | `/api/refresh-token` | This route sends POST request to Auth Server's `/oauth/token` to refresh tokens.  |
+| POST   | `/api/logout`        | This route sends POST request to Auth Server's `/api/oauth/logout` to logout.     |
+| GET    | `/api/me`            | This route sends GET request to Auth Server's `/api/oauth/me` to get user info.   |
 
 *Note*: If you wish to override the login, refresh token, logout, or get self logic, feel free to do so by updating the published `passport-pgt-client` config file.
 
