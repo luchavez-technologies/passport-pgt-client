@@ -26,11 +26,11 @@ $ composer require luchavez/passport-pgt-client
 
 1. Add these variables to `.env` file if you want to override the default values.
 
-| Variable Name      | Default Value       | Description                    |
-|--------------------|---------------------|--------------------------------|
-| `PPC_PASSPORT_URL` | `config('app.url')` | URL of Authentication Server   |
-| `PPC_PGC_ID`       | null                | Password grant client's id     |
-| `PPC_PGC_SECRET`   | null                | Password grant client's secret |
+| Variable Name                           | Default Value       | Description                    |
+|-----------------------------------------|---------------------|--------------------------------|
+| `PASSPORT_URL`                          | `config('app.url')` | URL of Authentication Server   |
+| `PASSPORT_PASSWORD_GRANT_CLIENT_ID`     | null                | Password grant client's ID     |
+| `PASSPORT_PASSWORD_GRANT_CLIENT_SECRET` | null                | Password grant client's secret |
 
 ## Usage
 
@@ -42,25 +42,16 @@ The package provides a service called [**PassportPgtClient**](src/Services/Passp
 
 Here's the list of its available methods.
 
-| Method Name                     | Return Type                                                           | Description                                                          |
-|---------------------------------|-----------------------------------------------------------------------|----------------------------------------------------------------------|
-| `getPassportUrl`                | `string`                                                              | gets the URL of Authentication Server                                |
-| `getPasswordGrantClientId`      | `string or int or null`                                               | gets the Password Grant Client's id                                  |
-| `getPasswordGrantClientSecret`  | `string or null`                                                      | gets the Password Grant Client's secret                              |
-| `setAuthClientController`       | `string or null`                                                      | sets the `AuthClientController`                                      |
-| `getAuthClientController`       | `string or null`                                                      | gets the `AuthClientController`                                      |
-| `setLoginAuthController`        | `void`                                                                | sets the `LoginAuthController`                                       |
-| `getLoginAuthController`        | `array`                                                               | gets the `LoginAuthController`                                       |
-| `setRefreshTokenAuthController` | `void`                                                                | sets the `RefreshTokenAuthController`                                |
-| `getRefreshTokenAuthController` | `array`                                                               | gets the `RefreshTokenAuthController`                                |
-| `setLogoutAuthController`       | `void`                                                                | sets the `LogoutAuthController`                                      |
-| `getLogoutAuthController`       | `array`                                                               | gets the `LogoutAuthController`                                      |
-| `setMeAuthController`           | `void`                                                                | sets the `MeAuthController`                                          |
-| `getMeAuthController`           | `array`                                                               | gets the `MeAuthController`                                          |
-| `login`                         | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/oauth/token` to login          |
-| `refreshToken`                  | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/oauth/token` to refresh tokens |
-| `logout`                        | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/api/oauth/logout` to logout    |
-| `getSelf`                       | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends GET request to Auth Server's `/api/oauth/me` to get user info  |
+| Method Name                    | Return Type                                                             | Description                                                          |
+|--------------------------------|-------------------------------------------------------------------------|----------------------------------------------------------------------|
+| `getPassportUrl`               | `string`                                                                | gets the URL of Authentication Server                                |
+| `getPasswordGrantClientId`     | `string or int or null`                                                 | gets the Password Grant Client's id                                  |
+| `getPasswordGrantClientSecret` | `string or null`                                                        | gets the Password Grant Client's secret                              |
+| `register`                     | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/oauth/token` to login          |
+| `login`                        | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/oauth/token` to login          |
+| `refreshToken`                 | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/oauth/token` to refresh tokens |
+| `logout`                       | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends POST request to Auth Server's `/api/oauth/logout` to logout    |
+| `getSelf`                      | `Luchavez\ApiSdkKit\Models\AuditLog or Illuminate\Http\Client\Response` | sends GET request to Auth Server's `/api/oauth/me` to get user info  |
 
 ### Routes
 

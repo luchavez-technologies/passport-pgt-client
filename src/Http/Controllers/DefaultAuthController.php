@@ -31,7 +31,7 @@ class DefaultAuthController extends Controller
             return response()->json($log->getDataFromResponse(), $log->getStatusFromResponse());
         }
 
-        return customResponse()
+        return simpleResponse()
             ->failed()
             ->message('Failed to create new user.')
             ->generate();
@@ -40,7 +40,7 @@ class DefaultAuthController extends Controller
     /**
      * Login
      *
-     * Email and password are required to login.
+     * Email and password are required to log in.
      *
      * @group Authentication (Client)
      *
@@ -57,14 +57,14 @@ class DefaultAuthController extends Controller
         $log = passportPgtClient()->login($validated['username'], $validated['password']);
 
         if ($log->getStatusFromResponse() == 200) {
-            return customResponse()
+            return simpleResponse()
                 ->success()
                 ->data($log->getDataFromResponse())
                 ->message('Successfully logged in.')
                 ->generate();
         }
 
-        return customResponse()
+        return simpleResponse()
             ->failed()
             ->message('Incorrect username or password.')
             ->generate();
@@ -87,7 +87,7 @@ class DefaultAuthController extends Controller
             return response()->json($log->getDataFromResponse(), $log->getStatusFromResponse());
         }
 
-        return customResponse()
+        return simpleResponse()
             ->failed()
             ->message('Failed to logout user.')
             ->generate();
@@ -110,14 +110,14 @@ class DefaultAuthController extends Controller
         $log = passportPgtClient()->refreshToken($validated['refresh_token']);
 
         if ($log->getStatusFromResponse() == 200) {
-            return customResponse()
+            return simpleResponse()
                 ->success()
                 ->data($log->getDataFromResponse())
                 ->message('Successfully refreshed tokens.')
                 ->generate();
         }
 
-        return customResponse()
+        return simpleResponse()
             ->failed()
             ->message('Failed to refresh token.')
             ->generate();
@@ -140,7 +140,7 @@ class DefaultAuthController extends Controller
             return response()->json($log->getDataFromResponse(), $log->getStatusFromResponse());
         }
 
-        return customResponse()
+        return simpleResponse()
             ->data([])
             ->message('You do not have the necessary permission to access this resource.')
             ->failed(403)
