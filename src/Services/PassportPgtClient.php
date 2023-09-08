@@ -25,9 +25,9 @@ class PassportPgtClient extends BaseApiSdkService
     /***** CONFIG-RELATED *****/
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPassportUrl(): string
+    public function getPassportUrl(): string|null
     {
         return config('passport-pgt-client.passport_server.url');
     }
@@ -51,9 +51,9 @@ class PassportPgtClient extends BaseApiSdkService
     /***** BASE API SERVICE METHODS  *****/
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getBaseUrl(): string
+    public function getBaseUrl(): string|null
     {
         return $this->getPassportUrl();
     }

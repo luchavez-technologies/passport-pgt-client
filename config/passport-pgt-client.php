@@ -4,7 +4,7 @@ use Luchavez\PassportPgtClient\Http\Controllers\DefaultAuthController;
 
 return [
     'passport_server' => [
-        'url' => env('PASSPORT_URL', config('app.url')),
+        'url' => env('PASSPORT_URL'),
         'password_grant_client' => [
             'id' => env('PASSPORT_PASSWORD_GRANT_CLIENT_ID'),
             'secret' => env('PASSPORT_PASSWORD_GRANT_CLIENT_SECRET'),
