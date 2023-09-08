@@ -27,7 +27,6 @@ class PassportPgtClientServiceProvider extends ServiceProvider
     protected array $env_vars = [
         'PASSPORT_PASSWORD_GRANT_CLIENT_ID' => null,
         'PASSPORT_PASSWORD_GRANT_CLIENT_SECRET' => null,
-        'PASSPORT_URL' => '${APP_URL}',
     ];
 
     /**
