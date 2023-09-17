@@ -30,7 +30,7 @@ return [
                 'uri' => 'api/oauth/me',
                 'http_method' => 'get',
             ],
-        ]
+        ],
     ],
     'routes' => [
         'register' => [
@@ -41,22 +41,22 @@ return [
         'login' => [
             'uri' => 'login',
             'action' => [DefaultAuthController::class, 'login'],
-            'http_method' => 'post'
+            'http_method' => 'post',
         ],
         'logout' => [
             'uri' => 'logout',
             'action' => [DefaultAuthController::class, 'logout'],
-            'http_method' => 'post'
+            'http_method' => 'post',
         ],
         'refresh-token' => [
             'uri' => 'refresh-token',
             'action' => [DefaultAuthController::class, 'refreshToken'],
-            'http_method' => 'post'
+            'http_method' => 'post',
         ],
         'me' => [
             'uri' => 'me',
             'action' => [DefaultAuthController::class, 'me'],
-            'http_method' => 'get'
+            'http_method' => 'get',
         ],
-    ]
+    ],
 ];
