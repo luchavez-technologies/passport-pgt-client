@@ -3,9 +3,9 @@
 namespace Luchavez\PassportPgtClient\Services;
 
 use Illuminate\Foundation\Application;
-use Luchavez\ApiSdkKit\Services\SimpleHttp;
-use Luchavez\ApiSdkKit\Abstracts\BaseApiSdkService;
 use Illuminate\Support\Str;
+use Luchavez\ApiSdkKit\Abstracts\BaseApiSdkService;
+use Luchavez\ApiSdkKit\Services\SimpleHttp;
 
 /**
  * Class PassportPgtClient
@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 class PassportPgtClient extends BaseApiSdkService
 {
     /**
-     * @param Application $application
+     * @param  Application  $application
      */
     public function __construct(protected Application $application)
     {
@@ -27,7 +27,7 @@ class PassportPgtClient extends BaseApiSdkService
     /**
      * @return string|null
      */
-    public function getPassportUrl(): string|null
+    public function getPassportUrl(): ?string
     {
         return config('passport-pgt-client.passport_server.url');
     }
@@ -53,7 +53,7 @@ class PassportPgtClient extends BaseApiSdkService
     /**
      * @return string|null
      */
-    public function getBaseUrl(): string|null
+    public function getBaseUrl(): ?string
     {
         return $this->getPassportUrl();
     }
@@ -61,7 +61,7 @@ class PassportPgtClient extends BaseApiSdkService
     /**
      * Since tokens are very sensitive information, they should not be logged.
      *
-     * @param bool $return_as_model
+     * @param  bool  $return_as_model
      * @return SimpleHttp
      */
     public function getHttp(bool $return_as_model = true): SimpleHttp
@@ -128,7 +128,7 @@ class PassportPgtClient extends BaseApiSdkService
      * @param  string|null  $token
      * @return SimpleHttp
      */
-    public function logout(string|null $token): SimpleHttp
+    public function logout(?string $token): SimpleHttp
     {
         ['uri' => $uri, 'http_method' => $method] = config('passport-pgt-client.passport_server.routes.logout');
 
@@ -143,7 +143,7 @@ class PassportPgtClient extends BaseApiSdkService
      * @param  string|null  $token
      * @return SimpleHttp
      */
-    public function getSelf(string|null $token): SimpleHttp
+    public function getSelf(?string $token): SimpleHttp
     {
         ['uri' => $uri, 'http_method' => $method] = config('passport-pgt-client.passport_server.routes.me');
 

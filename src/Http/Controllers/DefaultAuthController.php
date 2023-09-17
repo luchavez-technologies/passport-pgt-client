@@ -74,6 +74,7 @@ class DefaultAuthController extends Controller
      * Logout
      *
      * @group Authentication (Client)
+     *
      * @authenticated
      *
      * @param  Request  $request
@@ -127,6 +128,7 @@ class DefaultAuthController extends Controller
      * Get Self
      *
      * @group Authentication (Client)
+     *
      * @authenticated
      *
      * @param  Request  $request
